@@ -23,10 +23,10 @@ type Router struct {
 
 func (router *Router) Path(path string) string {
 	if router.VersionString == "" {
-		path = fmt.Sprintf("%v/%v", router.PrefixString, path)
+		path = fmt.Sprintf("%v%v", router.PrefixString, path)
 		return path
 	}
-	path = fmt.Sprintf("%v/%v/%v", router.VersionString, router.PrefixString, path)
+	path = fmt.Sprintf("%v%v%v", router.VersionString, router.PrefixString, path)
 	return path
 }
 
@@ -40,7 +40,7 @@ func (router *Router) GetRouter() *http.ServeMux {
 //  2. api/2/users/create
 func (router *Router) Version(version int) *Router {
 	if router.VersionString == "" {
-		router.VersionString = "api"
+		router.VersionString = "/api"
 	}
 	if version <= 0 {
 		version = 1
@@ -58,6 +58,6 @@ func (router *Router) Prefix(prefix string) *Router {
 		Middlewares:   router.Middlewares,
 		RoutePaths:    router.RoutePaths,
 	}
-	new_router.PrefixString = fmt.Sprintf("%v/%v", router.PrefixString, prefix)
+	new_router.PrefixString = fmt.Sprintf("%v%v", router.PrefixString, prefix)
 	return new_router
 }

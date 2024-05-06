@@ -33,6 +33,7 @@ func (server *HttpServer) LogShutdownMsg() {
 }
 
 func (server *HttpServer) Start() (err error) {
+	server.LogStartupMsg()
 	if !server.UseTls {
 		err = server.ListenAndServe()
 	} else {
@@ -45,6 +46,7 @@ func (server *HttpServer) Start() (err error) {
 }
 
 func (server *HttpServer) Stop(_context context.Context) (err error) {
+	server.LogShutdownMsg()
 	// shutdown the server
 	err = server.Shutdown(_context)
 	return
