@@ -11,6 +11,8 @@ func New(config *Config) *HttpServer {
 	router := &Router{
 		Mux:          http.NewServeMux(),
 		PrefixString: config.Router.VersionString,
+		Middlewares:  []func(http.Handler) http.Handler{},
+		RoutePaths:   map[string]string{},
 	}
 	// attach a prefix to the router if
 	// there is a prefix
