@@ -30,12 +30,10 @@ func (plugin *Plugin) Attach(router *Router) {
 			new_router.RoutePaths[route.Name] = route.Path
 			path := fmt.Sprintf("%v %v", route.Method, router.Path(route.Path))
 			new_router.Mux.HandleFunc(path, route.Handler)
-			fmt.Println(path)
 		} else {
 			router.RoutePaths[route.Name] = route.Path
 			path := fmt.Sprintf("%v %v", route.Method, router.Path(route.Path))
 			router.Mux.HandleFunc(path, route.Handler)
-			fmt.Println(path)
 		}
 	}
 }

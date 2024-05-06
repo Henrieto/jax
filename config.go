@@ -17,10 +17,21 @@ type ServerConfig struct {
 	WriteTimeout time.Duration
 	ReadTimeout  time.Duration
 	IdleTimeout  time.Duration
-	Middlewares  func(http.HandlerFunc) http.HandlerFunc
+	Middlewares  []func(http.HandlerFunc) http.HandlerFunc
 }
 type Config struct {
 	Plugins []Plugin
 	Router  *RouterConfig
-	Server  ServerConfig
+	Server  *ServerConfig
+}
+
+func DefaultServerConfig() *ServerConfig {
+	return &ServerConfig{
+		Port:         "8080",
+		Options:      []ServerOption{},
+		WriteTimeout: time.Second * 30,
+		ReadTimeout:  time.Second * 30,
+		IdleTimeout:  time.Second * 30,
+		Middlewares:  []func(http.HandlerFunc) http.HandlerFunc{},
+	}
 }

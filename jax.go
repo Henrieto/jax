@@ -32,6 +32,10 @@ func (jx *Jax) Initialize() {
 
 func New(config *Config) *Jax {
 	// initalize a new router
+	if config.Router == nil {
+		config.Router = &RouterConfig{}
+	}
+
 	router := &Router{
 		Mux:          http.NewServeMux(),
 		PrefixString: config.Router.VersionString,

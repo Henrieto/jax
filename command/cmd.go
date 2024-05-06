@@ -10,11 +10,11 @@ type Flag struct {
 }
 
 type Cmd struct {
-	*cobra.Command
+	cobraCommand *cobra.Command
 }
 
 func (flag *Cmd) GetFlag(key string) (string, error) {
-	value := flag.Flags().Lookup(key).Value
+	value := flag.cobraCommand.Flags().Lookup(key).Value
 	if value != nil {
 		return value.String(), nil
 	}
