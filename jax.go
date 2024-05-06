@@ -6,7 +6,31 @@ import (
 	"github.com/henrieto/jax/command"
 )
 
-func New(config *Config) *HttpServer {
+type Jax struct {
+	Server  *HttpServer
+	Plugins []Plugin
+	Router  *Router
+	Options []ServerOption
+}
+
+func (jx *Jax) AttachPlugins() {
+	for _, plugin := range jx.Plugins {
+		plugin.Attach(jx.Router)
+		command.Register(plugin.Commands...)
+	}
+}
+
+func (jx *Jax) Initialize() {
+	jx.AttachPlugins()
+	// set the commands for execution
+	command.Execute()
+	// change the default server configuration using options
+	for _, option := range jx.Options {
+		option(jx.Server)
+	}
+}
+
+func New(config *Config) *Jax {
 	// initalize a new router
 	router := &Router{
 		Mux:          http.NewServeMux(),
@@ -19,14 +43,7 @@ func New(config *Config) *HttpServer {
 	if config.Router.Prefix != "" {
 		router = router.Prefix(config.Router.Prefix)
 	}
-	// load the plugins and register there commands
-	for _, plugin := range config.Plugins {
-		plugin.Attach(router)
-		command.Register(plugin.Commands...)
-	}
-	// set the commands for execution
-	command.Execute()
-	// initialize a http server
+	// initalize a http server
 	server := &HttpServer{
 		Server: &http.Server{
 			WriteTimeout: config.Server.WriteTimeout,
@@ -40,10 +57,13 @@ func New(config *Config) *HttpServer {
 	server.Use(router.Middlewares...)
 	// set the server port
 	server.Address(":" + config.Server.Port)
-	// change the default server configuration using options
-	for _, option := range config.Server.Options {
-		option(server)
+
+	jx := &Jax{
+		Server:  server,
+		Plugins: config.Plugins,
+		Router:  router,
+		Options: config.Server.Options,
 	}
-	// return the server
-	return server
+	// return the Jax object
+	return jx
 }
