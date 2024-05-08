@@ -28,7 +28,7 @@ func (plugin *Plugin) Attach(router *Router) {
 		if route.Prefix != "" {
 			new_router := router.Prefix(route.Prefix)
 			new_router.RoutePaths[route.Name] = route.Path
-			path := fmt.Sprintf("%v %v", route.Method, router.Path(route.Path))
+			path := fmt.Sprintf("%v %v", route.Method, new_router.Path(route.Path))
 			new_router.Mux.HandleFunc(path, route.Handler)
 		} else {
 			router.RoutePaths[route.Name] = route.Path

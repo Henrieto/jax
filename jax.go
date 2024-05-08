@@ -21,7 +21,10 @@ func (jx *Jax) AttachPlugins() {
 }
 
 func (jx *Jax) Initialize() {
+	// attach the plugins the router
 	jx.AttachPlugins()
+	// load the commands
+	command.LoadCommands()
 	// set the commands for execution
 	command.Execute()
 	// change the default server configuration using options
@@ -34,6 +37,10 @@ func New(config *Config) *Jax {
 	// initalize a new router
 	if config.Router == nil {
 		config.Router = &RouterConfig{}
+	}
+
+	if config.Server == nil {
+		config.Server = DefaultServerConfig()
 	}
 
 	router := &Router{
