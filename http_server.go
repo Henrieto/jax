@@ -69,7 +69,12 @@ func (server *HttpServer) Address(address string) {
 	server.Addr = address
 }
 
-func (server *HttpServer) Listen() (err error) {
+func (server *HttpServer) Listen(addresses ...string) (err error) {
+	// check if the length of addresses is greater 0
+	if len(addresses) > 0 {
+		// set the address
+		server.Address(addresses[0])
+	}
 	// start the server in a goroutine
 	go func() { err = server.Start() }()
 	if err != nil {

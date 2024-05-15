@@ -69,6 +69,10 @@ func New(config *Config) *Jax {
 	// set the server port
 	server.Address(":" + config.Server.Port)
 
+	// set the run command http server
+	command.Server = server
+
+	// initialize jax object
 	jx := &Jax{
 		Server:  server,
 		Plugins: config.Plugins,

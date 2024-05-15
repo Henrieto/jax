@@ -1,6 +1,8 @@
 package command
 
-var CommandList = commandList{[]*Command{}}
+var CommandList = commandList{[]*Command{
+	&RunServerCmd,
+}}
 
 func LoadCommands() {
 	for _, cmd := range CommandList.Commands {
